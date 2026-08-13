@@ -3,271 +3,443 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="CineVerse – Explore trending, popular, top-rated, and upcoming movies with high-quality trailers and personalized watchlists." />
-  <meta name="keywords" content="movies, trailers, cinema, watchlist, trending, Netflix style, CineVerse" />
-  <meta property="og:title" content="CineVerse – Discover Movies" />
-  <meta property="og:description" content="Browse trending, popular, and top-rated movies with a premium dark cinematic aesthetic." />
+  <meta name="description" content="CineScope – Discover, explore, and review your favorite movies with a premium glassmorphic interface and optional live TMDB API integration." />
+  <meta name="keywords" content="movies, trailers, glassmorphic UI, watchlist, cineverse, cinescope, film discovery" />
+  <meta property="og:title" content="CineScope – Explore Cinema" />
+  <meta property="og:description" content="Discover popular, top-rated, and upcoming movies with a high-fidelity cinematic interface." />
   <meta property="og:type" content="website" />
-  <title>CineVerse – Discover Your Next Favorite Film</title>
+  <title>CineScope – Discover & Review Films</title>
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   
   <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- ===== NAVBAR ===== -->
-  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+  <!-- ===== GLASSMORPHIC HEADER / NAVBAR ===== -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main Navigation">
     <div class="nav-container">
-      <a href="#" class="nav-logo" aria-label="CineVerse Home">
-        <span class="logo-text">Cine<span>Verse</span></span>
+      <a href="#" class="nav-brand" id="navLogo" aria-label="CineScope Home">
+        <span class="brand-text">Cine<span>Scope</span></span>
       </a>
 
+      <!-- Navigation Links -->
       <div class="nav-links" role="menubar">
-        <button class="nav-link active" role="menuitem" id="navHome">Home</button>
-        <button class="nav-link" role="menuitem" id="navMovies">Browse</button>
-        <button class="nav-link" role="menuitem" id="navWatchlist">
-          Watchlist
-          <span class="watchlist-badge" id="watchlistBadge" style="display: none;">0</span>
+        <button class="nav-link active" role="menuitem" id="navHomeBtn">Home</button>
+        <button class="nav-link" role="menuitem" id="navBrowseBtn">Browse</button>
+        <button class="nav-link" role="menuitem" id="navWatchlistBtn">
+          My List
+          <span class="badge" id="watchlistBadge" style="display: none;">0</span>
         </button>
+        <button class="nav-link" role="menuitem" id="navSettingsBtn">Settings</button>
       </div>
 
+      <!-- Quick Actions -->
       <div class="nav-actions">
-        <!-- Search -->
-        <div class="search-wrapper">
+        <!-- Search bar -->
+        <div class="search-box">
           <input
-            type="search"
+            type="text"
             class="search-input"
             id="searchInput"
-            placeholder="Titles, people, genres..."
+            placeholder="Search titles, actors, genres..."
             aria-label="Search movies"
             autocomplete="off"
           />
-          <button class="search-btn" id="searchBtn" aria-label="Search">
+          <button class="search-btn" id="searchBtn" aria-label="Search button">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
           </button>
-          <button class="search-clear" id="searchClear" aria-label="Clear search" style="display: none;">✕</button>
+          <button class="search-clear" id="searchClearBtn" aria-label="Clear search" style="display: none;">✕</button>
+        </div>
+
+        <!-- Mode / Status Indicator -->
+        <div class="mode-status" id="modeStatus" title="System Mode">
+          <span class="status-dot green"></span>
+          <span class="status-text" id="statusText">Mock Mode</span>
         </div>
 
         <!-- Theme Toggle -->
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme">
-          <span id="themeIcon">☀️</span>
+        <button class="theme-toggle" id="themeToggleBtn" aria-label="Toggle dark/light theme">
+          <span class="theme-icon-sun">☀️</span>
+          <span class="theme-icon-moon" style="display: none;">🌙</span>
         </button>
 
-        <!-- Hamburger (Mobile) -->
-        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" id="mobileMenuToggleBtn" aria-label="Toggle navigation menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
       </div>
     </div>
 
-    <!-- Mobile menu -->
+    <!-- Mobile Nav Menu -->
     <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-      <a href="#" class="mobile-link" data-section="home">Home</a>
-      <a href="#" class="mobile-link" data-section="movies">Browse</a>
-      <a href="#" class="mobile-link" data-section="watchlist">
-        Watchlist <span class="watchlist-badge-mobile" id="watchlistBadgeMobile">0</span>
-      </a>
-      <div class="mobile-search">
-        <input type="search" class="mobile-search-input" id="mobileSearchInput" placeholder="Search movies..." aria-label="Search movies on mobile" />
-        <button class="mobile-search-btn" id="mobileSearchBtn">Search</button>
+      <button class="mobile-link active" data-view="home">Home</button>
+      <button class="mobile-link" data-view="browse">Browse</button>
+      <button class="mobile-link" data-view="watchlist">My List <span class="mobile-badge" id="watchlistBadgeMobile">0</span></button>
+      <button class="mobile-link" data-view="settings">Settings</button>
+      <div class="mobile-search-wrapper">
+        <input type="text" class="mobile-search-input" id="mobileSearchInput" placeholder="Search films..." aria-label="Search movies mobile" />
+        <button class="btn btn-primary btn-sm" id="mobileSearchBtn">Go</button>
       </div>
     </div>
   </nav>
 
-  <!-- ===== MAIN WINDOW CONTENT ===== -->
-  <main id="mainContent">
+  <!-- ===== MAIN SITE WRAPPER ===== -->
+  <main id="mainContainer">
 
-    <!-- ── VIEW: HOME ── -->
-    <div id="homeView" class="view active">
-      <!-- Big Banner Hero -->
-      <section class="hero" aria-label="Featured content">
-        <div class="hero-backdrop" id="heroBackdrop">
-          <div class="hero-gradient"></div>
-        </div>
-        <div class="hero-content">
-          <!-- Skeleton Loading -->
-          <div class="hero-skeleton" id="heroSkeleton" style="display: none;">
-            <div class="skeleton skeleton-tag"></div>
+    <!-- ─── VIEW 1: HOME ─── -->
+    <section id="viewHome" class="site-view active">
+      <!-- High-Fidelity Cinematic Carousel / Banner -->
+      <div class="hero-carousel" id="heroCarousel">
+        <div class="hero-slides" id="heroSlidesContainer">
+          <!-- Hero slide injected by JavaScript -->
+          <div class="hero-slide-skeleton">
             <div class="skeleton skeleton-title"></div>
-            <div class="skeleton skeleton-meta"></div>
-            <div class="skeleton skeleton-desc"></div>
-            <div class="skeleton skeleton-desc short"></div>
-            <div class="skeleton-btns">
-              <div class="skeleton skeleton-btn"></div>
-              <div class="skeleton skeleton-btn"></div>
-            </div>
-          </div>
-
-          <!-- Highlight Info -->
-          <div id="heroInfo">
-            <div class="hero-badges" id="heroBadges"></div>
-            <h1 class="hero-title" id="heroTitle">Loading Feature...</h1>
-            <div class="hero-meta" id="heroMeta"></div>
-            <p class="hero-overview" id="heroOverview"></p>
-            <div class="hero-actions">
-              <button class="btn btn-primary" id="heroTrailerBtn" aria-label="Watch official trailer">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
-                Play Trailer
-              </button>
-              <button class="btn btn-secondary" id="heroWatchlistBtn" aria-label="Add to watchlist">
-                <span>+</span> Add to Watchlist
-              </button>
-            </div>
+            <div class="skeleton skeleton-text"></div>
+            <div class="skeleton skeleton-btn"></div>
           </div>
         </div>
-      </section>
-
-      <!-- Horizontal Movie Sections -->
-      <div class="sections-container">
-        <!-- Trending -->
-        <section class="movie-section" aria-label="Trending Now">
-          <div class="section-header">
-            <h2 class="section-title">Trending Now</h2>
-          </div>
-          <div class="movie-row" id="trendingRow" role="list"></div>
-        </section>
-
-        <!-- Popular -->
-        <section class="movie-section" aria-label="Popular Movies">
-          <div class="section-header">
-            <h2 class="section-title">Popular on CineVerse</h2>
-          </div>
-          <div class="movie-row" id="popularRow" role="list"></div>
-        </section>
-
-        <!-- Top Rated -->
-        <section class="movie-section" aria-label="Top Rated Movies">
-          <div class="section-header">
-            <h2 class="section-title">Top Rated</h2>
-          </div>
-          <div class="movie-row" id="topRatedRow" role="list"></div>
-        </section>
-
-        <!-- Upcoming -->
-        <section class="movie-section" aria-label="Upcoming Releases">
-          <div class="section-header">
-            <h2 class="section-title">Upcoming Releases</h2>
-          </div>
-          <div class="movie-row" id="upcomingRow" role="list"></div>
-        </section>
-      </div>
-    </div>
-
-    <!-- ── VIEW: BROWSE/DISCOVER ── -->
-    <div id="moviesView" class="view">
-      <div class="view-header">
-        <h1 class="view-title">Discover Movies</h1>
-        <p class="view-subtitle">Filter by genres, ratings, and sort preferences</p>
+        <!-- Slide indicators/dots -->
+        <div class="carousel-indicators" id="carouselIndicators"></div>
       </div>
 
-      <!-- Filters Row -->
-      <div class="filters-bar" aria-label="Filters">
-        <div class="filter-group">
-          <label for="genreFilter" class="filter-label">Genre</label>
-          <select class="filter-select" id="genreFilter">
-            <option value="">All Genres</option>
+      <!-- Categories Container -->
+      <div class="categories-wrapper">
+        <!-- Section: Trending -->
+        <section class="movie-shelf" aria-labelledby="shelfTrendingTitle">
+          <div class="shelf-header">
+            <h2 id="shelfTrendingTitle" class="shelf-title">Trending This Week</h2>
+            <div class="shelf-nav">
+              <button class="shelf-btn-left" aria-label="Scroll left">&#8249;</button>
+              <button class="shelf-btn-right" aria-label="Scroll right">&#8250;</button>
+            </div>
+          </div>
+          <div class="shelf-row scroll-smooth" id="shelfTrending" role="list">
+            <!-- Movie cards injected by JS -->
+          </div>
+        </section>
+
+        <!-- Section: Popular -->
+        <section class="movie-shelf" aria-labelledby="shelfPopularTitle">
+          <div class="shelf-header">
+            <h2 id="shelfPopularTitle" class="shelf-title">Popular Worldwide</h2>
+            <div class="shelf-nav">
+              <button class="shelf-btn-left" aria-label="Scroll left">&#8249;</button>
+              <button class="shelf-btn-right" aria-label="Scroll right">&#8250;</button>
+            </div>
+          </div>
+          <div class="shelf-row scroll-smooth" id="shelfPopular" role="list">
+            <!-- Movie cards injected by JS -->
+          </div>
+        </section>
+
+        <!-- Section: Top Rated -->
+        <section class="movie-shelf" aria-labelledby="shelfTopRatedTitle">
+          <div class="shelf-header">
+            <h2 id="shelfTopRatedTitle" class="shelf-title">Top Rated Classics</h2>
+            <div class="shelf-nav">
+              <button class="shelf-btn-left" aria-label="Scroll left">&#8249;</button>
+              <button class="shelf-btn-right" aria-label="Scroll right">&#8250;</button>
+            </div>
+          </div>
+          <div class="shelf-row scroll-smooth" id="shelfTopRated" role="list">
+            <!-- Movie cards injected by JS -->
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ─── VIEW 2: BROWSE / DISCOVER ─── -->
+    <section id="viewBrowse" class="site-view">
+      <div class="section-title-wrapper">
+        <h1 class="view-title">Discover Masterpieces</h1>
+        <p class="view-subtitle">Filter through hundreds of blockbusters, indies, and cult classics.</p>
+      </div>
+
+      <!-- Advanced Filters Row -->
+      <div class="filters-panel">
+        <div class="filter-item">
+          <label for="filterGenre">Genre</label>
+          <select id="filterGenre" class="custom-select">
+            <option value="all">All Genres</option>
           </select>
         </div>
 
-        <div class="filter-group">
-          <label for="ratingFilter" class="filter-label">Min Rating</label>
-          <select class="filter-select" id="ratingFilter">
+        <div class="filter-item">
+          <label for="filterRating">Minimum Score</label>
+          <select id="filterRating" class="custom-select">
             <option value="0">Any Rating</option>
-            <option value="5">5+ ⭐</option>
-            <option value="6">6+ ⭐</option>
-            <option value="7">7+ ⭐</option>
-            <option value="8">8+ ⭐</option>
-            <option value="9">9+ ⭐</option>
+            <option value="5">5+ ⭐ Good</option>
+            <option value="7">7+ ⭐ Great</option>
+            <option value="8.5">8.5+ ⭐ Masterpiece</option>
           </select>
         </div>
 
-        <div class="filter-group">
-          <label for="sortFilter" class="filter-label">Sort By</label>
-          <select class="filter-select" id="sortFilter">
+        <div class="filter-item">
+          <label for="filterYear">Release Year</label>
+          <select id="filterYear" class="custom-select">
+            <option value="all">Any Year</option>
+            <option value="2020s">2020 - Present</option>
+            <option value="2010s">2010 - 2019</option>
+            <option value="2000s">2000 - 2009</option>
+            <option value="classic">Before 2000</option>
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <label for="filterSort">Sort By</label>
+          <select id="filterSort" class="custom-select">
             <option value="popularity">Popularity</option>
-            <option value="rating_desc">Rating</option>
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
+            <option value="rating">Rating</option>
+            <option value="release_date">Newest Releases</option>
           </select>
         </div>
 
-        <button class="btn btn-outline reset-filters-btn" id="resetFilters">Reset Filters</button>
+        <button class="btn btn-outline" id="clearFiltersBtn">Reset Filters</button>
       </div>
 
-      <!-- Movie Grid -->
-      <div class="movies-grid-container">
-        <div class="movie-grid" id="moviesGrid" role="list"></div>
-        <div class="load-more-container">
-          <button class="btn btn-outline load-more-btn" id="loadMoreBtn">Load More</button>
+      <!-- Browse Movie Grid -->
+      <div class="grid-wrapper">
+        <div class="movie-grid" id="browseGrid" role="list">
+          <!-- Loaded dynamically -->
+        </div>
+        <div class="load-more-box" id="loadMoreBox" style="display: none;">
+          <button class="btn btn-primary" id="loadMoreBtn">Load More Titles</button>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- ── VIEW: SEARCH RESULTS ── -->
-    <div id="searchView" class="view">
-      <div class="view-header">
-        <h1 class="view-title">Search Results</h1>
-        <p class="view-subtitle" id="searchResultsSubtitle">Searching...</p>
-      </div>
-      <div class="movies-grid-container">
-        <div class="movie-grid" id="searchGrid" role="list"></div>
-      </div>
-    </div>
-
-    <!-- ── VIEW: WATCHLIST ── -->
-    <div id="watchlistView" class="view">
-      <div class="view-header">
-        <h1 class="view-title">My List</h1>
-        <p class="view-subtitle" id="watchlistSubtitle">No movies saved</p>
+    <!-- ─── VIEW 3: MY WATCHLIST ─── -->
+    <section id="viewWatchlist" class="site-view">
+      <div class="section-title-wrapper">
+        <h1 class="view-title">My Personal List</h1>
+        <p class="view-subtitle" id="watchlistCountText">0 titles saved for later</p>
       </div>
 
-      <div class="movies-grid-container">
-        <div class="movie-grid" id="watchlistGrid" role="list"></div>
+      <!-- Watchlist Grid -->
+      <div class="grid-wrapper">
+        <div class="movie-grid" id="watchlistGrid" role="list">
+          <!-- Loaded dynamically -->
+        </div>
         
-        <!-- Empty Watchlist fallback -->
-        <div class="empty-state" id="watchlistEmpty" style="display: none;">
-          <div class="empty-icon">🍿</div>
-          <h3 class="empty-title">Your list is empty</h3>
-          <p class="empty-desc">Explore movies and add them to your list to watch later.</p>
-          <button class="btn btn-primary" id="browseMoviesBtn">Browse CineVerse</button>
+        <!-- Empty Watchlist state -->
+        <div class="empty-state-box" id="watchlistEmptyState" style="display: none;">
+          <span class="empty-icon">🍿</span>
+          <h2>Your Watchlist is Empty</h2>
+          <p>Browse through our collection of premium movies and click "+ My List" to build your custom library.</p>
+          <button class="btn btn-primary" id="watchlistBrowseBtn">Explore Movies Now</button>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- ─── VIEW 4: SETTINGS & API CONFIG ─── -->
+    <section id="viewSettings" class="site-view">
+      <div class="section-title-wrapper">
+        <h1 class="view-title">System Settings</h1>
+        <p class="view-subtitle">Toggle data modes, API integrations, and local database cache settings.</p>
+      </div>
+
+      <div class="settings-container">
+        <!-- API Connection Section -->
+        <div class="settings-card">
+          <h2 class="settings-card-title">Live TMDB API Integration</h2>
+          <p class="settings-card-desc">
+            Unlock the complete, real-time TMDB library of millions of movies. Enter your TMDB API Key (v3) to toggle Live Mode.
+          </p>
+          
+          <div class="settings-form">
+            <div class="form-group">
+              <label for="apiKeyInput">TMDB API Key (v3 Key)</label>
+              <input 
+                type="password" 
+                id="apiKeyInput" 
+                class="form-control" 
+                placeholder="Paste your 32-character API key here..."
+                autocomplete="off"
+              />
+            </div>
+            
+            <div class="settings-actions">
+              <button class="btn btn-primary" id="saveApiKeyBtn">Enable Live API</button>
+              <button class="btn btn-outline" id="disconnectApiBtn" style="display: none;">Disconnect API</button>
+            </div>
+          </div>
+          
+          <!-- API Status Banner -->
+          <div class="api-status-banner mock" id="apiStatusBanner">
+            <div class="banner-icon">💡</div>
+            <div class="banner-text">
+              <strong>Running in Offline Mock Mode:</strong> Using high-fidelity built-in dataset containing featured trailers, reviews, and categories. No setup required!
+            </div>
+          </div>
+        </div>
+
+        <!-- Customizations and Storage -->
+        <div class="settings-card">
+          <h2 class="settings-card-title">Local Cache & Storage Management</h2>
+          <p class="settings-card-desc">
+            Reset reviews, clean up your local watchlist store, or reset all app settings back to default.
+          </p>
+          <div class="settings-btn-grid">
+            <button class="btn btn-outline-danger" id="clearReviewsBtn">Clear All Custom Reviews</button>
+            <button class="btn btn-outline-danger" id="clearWatchlistBtn">Reset My Watchlist</button>
+            <button class="btn btn-outline" id="resetAppSettingsBtn">Reset System Defaults</button>
+          </div>
+        </div>
+
+        <!-- App Credit info -->
+        <div class="settings-card about-card">
+          <h3>CineScope Cinema Engine v2.0</h3>
+          <p>Built with native HTML5, ES6 JavaScript modules, and CSS Custom Properties. Styled with glassmorphism overlays and optimized performance layouts.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── VIEW 5: SEARCH RESULTS ─── -->
+    <section id="viewSearch" class="site-view">
+      <div class="section-title-wrapper">
+        <h1 class="view-title" id="searchResultTitle">Search Results</h1>
+        <p class="view-subtitle" id="searchResultMeta">Showing matches for your query</p>
+      </div>
+
+      <div class="grid-wrapper">
+        <div class="movie-grid" id="searchGrid" role="list">
+          <!-- Loaded dynamically -->
+        </div>
+      </div>
+    </section>
 
   </main>
 
-  <!-- ===== MOVIE DETAIL OVERLAY MODAL ===== -->
-  <div class="modal-overlay" id="movieModal" role="dialog" aria-modal="true" style="display: none;">
-    <div class="modal-container">
-      <button class="modal-close" id="modalClose" aria-label="Close details">✕</button>
-      <div class="modal-backdrop" id="modalBackdrop">
-        <div class="modal-backdrop-gradient"></div>
-      </div>
-      <div class="modal-body">
-        <div class="modal-poster-col">
-          <img class="modal-poster" id="modalPoster" src="" alt="Movie Poster" />
+  <!-- ===== MULTI-TAB MOVIE DETAIL OVERLAY MODAL ===== -->
+  <div class="modal-backdrop" id="movieDetailModal" role="dialog" aria-modal="true" style="display: none;">
+    <div class="modal-window">
+      <!-- Close Button -->
+      <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close dialog">✕</button>
+
+      <!-- Glass Background Wrapper -->
+      <div class="modal-hero" id="modalHeroBg">
+        <div class="modal-hero-overlay"></div>
+        <div class="modal-hero-content">
+          <div class="modal-poster-wrapper">
+            <img id="modalPosterImg" src="" alt="Movie Poster" />
+          </div>
+          <div class="modal-header-info">
+            <span class="modal-tagline" id="modalTagline"></span>
+            <h2 class="modal-title" id="modalMovieTitle">Movie Title</h2>
+            <div class="modal-meta-badges">
+              <span class="badge badge-accent" id="modalVoteAvg">⭐ 0.0</span>
+              <span class="badge" id="modalReleaseDate">2026</span>
+              <span class="badge" id="modalRuntime">120 min</span>
+              <span class="badge badge-outline" id="modalLanguage">EN</span>
+            </div>
+            <div class="modal-actions-row">
+              <button class="btn btn-primary" id="modalPlayTrailerBtn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+                Watch Trailer
+              </button>
+              <button class="btn btn-secondary" id="modalWatchlistToggleBtn">
+                + My List
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="modal-info-col">
-          <div class="modal-genres" id="modalGenres"></div>
-          <h2 class="modal-title" id="modalTitle">Loading details...</h2>
-          <div class="modal-meta-row" id="modalMetaRow"></div>
-          <p class="modal-overview" id="modalOverview"></p>
-          <div class="modal-stats" id="modalStats"></div>
-          <div class="modal-actions">
-            <button class="btn btn-primary" id="modalTrailerBtn">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
-              Watch Trailer
-            </button>
-            <button class="btn btn-secondary" id="modalWatchlistBtn">
-              + My List
-            </button>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="modal-tabs" role="tablist">
+        <button class="modal-tab-btn active" role="tab" aria-selected="true" id="tabOverviewBtn">Overview</button>
+        <button class="modal-tab-btn" role="tab" aria-selected="false" id="tabCastBtn">Cast & Details</button>
+        <button class="modal-tab-btn" role="tab" aria-selected="false" id="tabReviewsBtn">User Reviews</button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="modal-tab-content">
+        <!-- Tab 1: Overview -->
+        <div class="tab-pane active" id="paneOverview">
+          <h3>Synopsis</h3>
+          <p class="movie-plot" id="modalOverviewPlot"></p>
+          <div class="movie-genres-row" id="modalGenresRow"></div>
+        </div>
+
+        <!-- Tab 2: Cast & Details -->
+        <div class="tab-pane" id="paneCast">
+          <div class="details-split">
+            <div class="cast-section">
+              <h3>Principal Cast</h3>
+              <div class="cast-grid" id="modalCastGrid">
+                <!-- Cast members injected by JS -->
+              </div>
+            </div>
+            <div class="crew-section">
+              <h3>Production Crew</h3>
+              <div class="crew-list">
+                <div class="crew-item">
+                  <span class="crew-label">Director</span>
+                  <span class="crew-value" id="modalDirector">-</span>
+                </div>
+                <div class="crew-item">
+                  <span class="crew-label">Writer</span>
+                  <span class="crew-value" id="modalWriter">-</span>
+                </div>
+                <div class="crew-item">
+                  <span class="crew-label">Production Company</span>
+                  <span class="crew-value" id="modalProductionCo">-</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Reviews -->
+        <div class="tab-pane" id="paneReviews">
+          <div class="reviews-layout">
+            <!-- Review submission form -->
+            <form class="review-form" id="newReviewForm">
+              <h3>Write a Review</h3>
+              
+              <div class="form-group">
+                <label>Your Rating</label>
+                <div class="star-rating-input">
+                  <input type="radio" id="star10" name="userScore" value="10" /><label for="star10" title="10/10 Masterpiece">★</label>
+                  <input type="radio" id="star9" name="userScore" value="9" /><label for="star9" title="9/10 Incredible">★</label>
+                  <input type="radio" id="star8" name="userScore" value="8" /><label for="star8" title="8/10 Great">★</label>
+                  <input type="radio" id="star7" name="userScore" value="7" /><label for="star7" title="7/10 Good">★</label>
+                  <input type="radio" id="star6" name="userScore" value="6" /><label for="star6" title="6/10 Fine">★</label>
+                  <input type="radio" id="star5" name="userScore" value="5" /><label for="star5" title="5/10 Average">★</label>
+                  <input type="radio" id="star4" name="userScore" value="4" /><label for="star4" title="4/10 Poor">★</label>
+                  <input type="radio" id="star3" name="userScore" value="3" /><label for="star3" title="3/10 Bad">★</label>
+                  <input type="radio" id="star2" name="userScore" value="2" /><label for="star2" title="2/10 Awful">★</label>
+                  <input type="radio" id="star1" name="userScore" value="1" /><label for="star1" title="1/10 Unwatchable">★</label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="reviewAuthorInput">Your Name</label>
+                <input type="text" id="reviewAuthorInput" class="form-control" placeholder="e.g. MovieBuff99" required />
+              </div>
+
+              <div class="form-group">
+                <label for="reviewTextInput">Your Review</label>
+                <textarea id="reviewTextInput" class="form-control" rows="3" placeholder="What did you think of the story, action, acting, or visual details?" required></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Submit Review</button>
+            </form>
+
+            <!-- Reviews list -->
+            <div class="reviews-list-container">
+              <h3>Community & Personal Reviews</h3>
+              <div class="reviews-list" id="modalReviewsList">
+                <!-- User reviews dynamically populated -->
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -275,12 +447,10 @@
   </div>
 
   <!-- ===== VIDEO TRAILER OVERLAY MODAL ===== -->
-  <div class="modal-overlay trailer-modal-overlay" id="trailerModal" role="dialog" aria-modal="true" style="display: none;">
-    <div class="trailer-modal-container">
-      <button class="modal-close trailer-close" id="trailerClose" aria-label="Close trailer">✕</button>
-      
-      <!-- Video Player Wrapper -->
-      <div class="trailer-iframe-wrapper" id="trailerIframeWrapper">
+  <div class="modal-backdrop video-modal-backdrop" id="trailerModal" role="dialog" aria-modal="true" style="display: none;">
+    <div class="video-modal-window">
+      <button class="modal-close-btn" id="trailerCloseBtn" aria-label="Close trailer">✕</button>
+      <div class="video-player-container" id="videoPlayerContainer">
         <iframe
           id="trailerIframe"
           src=""
@@ -290,27 +460,24 @@
           title="Movie Trailer"
         ></iframe>
       </div>
-
-      <!-- No trailer fallback -->
-      <div class="trailer-no-video" id="trailerNoVideo" style="display: none;">
-        <div class="empty-icon">🎞️</div>
-        <h3>No Trailer Available</h3>
-        <p>An official YouTube trailer could not be located for this movie.</p>
+      <!-- Fallback empty/no-trailer state -->
+      <div class="no-trailer-state" id="noTrailerState" style="display: none;">
+        <span class="empty-icon">🎞️</span>
+        <h3>Trailer Not Available</h3>
+        <p>We couldn't locate an official YouTube link for this movie. Check back later!</p>
       </div>
     </div>
   </div>
 
-  <!-- ===== TOAST NOTIFICATION CONTAINER ===== -->
+  <!-- ===== TOAST NOTIFICATIONS ===== -->
   <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
-  <!-- ===== SCROLL TO TOP ===== -->
+  <!-- ===== SCROLL TO TOP BTN ===== -->
   <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top" style="display: none;">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="18,15 12,9 6,15"/>
-    </svg>
+    ▲
   </button>
 
-  <!-- Script Logic -->
+  <!-- Javascript Logic -->
   <script src="script.js"></script>
 </body>
 </html>
