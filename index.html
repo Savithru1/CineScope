@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="CineVerse – Explore trending, popular, top-rated, and upcoming movies with high-quality trailers and personalized watchlists." />
+  <meta name="keywords" content="movies, trailers, cinema, watchlist, trending, Netflix style, CineVerse" />
+  <meta property="og:title" content="CineVerse – Discover Movies" />
+  <meta property="og:description" content="Browse trending, popular, and top-rated movies with a premium dark cinematic aesthetic." />
+  <meta property="og:type" content="website" />
+  <title>CineVerse – Discover Your Next Favorite Film</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800;900&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-container">
+      <a href="#" class="nav-logo" aria-label="CineVerse Home">
+        <span class="logo-text">Cine<span>Verse</span></span>
+      </a>
+
+      <div class="nav-links" role="menubar">
+        <button class="nav-link active" role="menuitem" id="navHome">Home</button>
+        <button class="nav-link" role="menuitem" id="navMovies">Browse</button>
+        <button class="nav-link" role="menuitem" id="navWatchlist">
+          Watchlist
+          <span class="watchlist-badge" id="watchlistBadge" style="display: none;">0</span>
+        </button>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Search -->
+        <div class="search-wrapper">
+          <input
+            type="search"
+            class="search-input"
+            id="searchInput"
+            placeholder="Titles, people, genres..."
+            aria-label="Search movies"
+            autocomplete="off"
+          />
+          <button class="search-btn" id="searchBtn" aria-label="Search">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </button>
+          <button class="search-clear" id="searchClear" aria-label="Clear search" style="display: none;">✕</button>
+        </div>
+
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light theme">
+          <span id="themeIcon">☀️</span>
+        </button>
+
+        <!-- Hamburger (Mobile) -->
+        <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <a href="#" class="mobile-link" data-section="home">Home</a>
+      <a href="#" class="mobile-link" data-section="movies">Browse</a>
+      <a href="#" class="mobile-link" data-section="watchlist">
+        Watchlist <span class="watchlist-badge-mobile" id="watchlistBadgeMobile">0</span>
+      </a>
+      <div class="mobile-search">
+        <input type="search" class="mobile-search-input" id="mobileSearchInput" placeholder="Search movies..." aria-label="Search movies on mobile" />
+        <button class="mobile-search-btn" id="mobileSearchBtn">Search</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== MAIN WINDOW CONTENT ===== -->
+  <main id="mainContent">
+
+    <!-- ── VIEW: HOME ── -->
+    <div id="homeView" class="view active">
+      <!-- Big Banner Hero -->
+      <section class="hero" aria-label="Featured content">
+        <div class="hero-backdrop" id="heroBackdrop">
+          <div class="hero-gradient"></div>
+        </div>
+        <div class="hero-content">
+          <!-- Skeleton Loading -->
+          <div class="hero-skeleton" id="heroSkeleton" style="display: none;">
+            <div class="skeleton skeleton-tag"></div>
+            <div class="skeleton skeleton-title"></div>
+            <div class="skeleton skeleton-meta"></div>
+            <div class="skeleton skeleton-desc"></div>
+            <div class="skeleton skeleton-desc short"></div>
+            <div class="skeleton-btns">
+              <div class="skeleton skeleton-btn"></div>
+              <div class="skeleton skeleton-btn"></div>
+            </div>
+          </div>
+
+          <!-- Highlight Info -->
+          <div id="heroInfo">
+            <div class="hero-badges" id="heroBadges"></div>
+            <h1 class="hero-title" id="heroTitle">Loading Feature...</h1>
+            <div class="hero-meta" id="heroMeta"></div>
+            <p class="hero-overview" id="heroOverview"></p>
+            <div class="hero-actions">
+              <button class="btn btn-primary" id="heroTrailerBtn" aria-label="Watch official trailer">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+                Play Trailer
+              </button>
+              <button class="btn btn-secondary" id="heroWatchlistBtn" aria-label="Add to watchlist">
+                <span>+</span> Add to Watchlist
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Horizontal Movie Sections -->
+      <div class="sections-container">
+        <!-- Trending -->
+        <section class="movie-section" aria-label="Trending Now">
+          <div class="section-header">
+            <h2 class="section-title">Trending Now</h2>
+          </div>
+          <div class="movie-row" id="trendingRow" role="list"></div>
+        </section>
+
+        <!-- Popular -->
+        <section class="movie-section" aria-label="Popular Movies">
+          <div class="section-header">
+            <h2 class="section-title">Popular on CineVerse</h2>
+          </div>
+          <div class="movie-row" id="popularRow" role="list"></div>
+        </section>
+
+        <!-- Top Rated -->
+        <section class="movie-section" aria-label="Top Rated Movies">
+          <div class="section-header">
+            <h2 class="section-title">Top Rated</h2>
+          </div>
+          <div class="movie-row" id="topRatedRow" role="list"></div>
+        </section>
+
+        <!-- Upcoming -->
+        <section class="movie-section" aria-label="Upcoming Releases">
+          <div class="section-header">
+            <h2 class="section-title">Upcoming Releases</h2>
+          </div>
+          <div class="movie-row" id="upcomingRow" role="list"></div>
+        </section>
+      </div>
+    </div>
+
+    <!-- ── VIEW: BROWSE/DISCOVER ── -->
+    <div id="moviesView" class="view">
+      <div class="view-header">
+        <h1 class="view-title">Discover Movies</h1>
+        <p class="view-subtitle">Filter by genres, ratings, and sort preferences</p>
+      </div>
+
+      <!-- Filters Row -->
+      <div class="filters-bar" aria-label="Filters">
+        <div class="filter-group">
+          <label for="genreFilter" class="filter-label">Genre</label>
+          <select class="filter-select" id="genreFilter">
+            <option value="">All Genres</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="ratingFilter" class="filter-label">Min Rating</label>
+          <select class="filter-select" id="ratingFilter">
+            <option value="0">Any Rating</option>
+            <option value="5">5+ ⭐</option>
+            <option value="6">6+ ⭐</option>
+            <option value="7">7+ ⭐</option>
+            <option value="8">8+ ⭐</option>
+            <option value="9">9+ ⭐</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="sortFilter" class="filter-label">Sort By</label>
+          <select class="filter-select" id="sortFilter">
+            <option value="popularity">Popularity</option>
+            <option value="rating_desc">Rating</option>
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+          </select>
+        </div>
+
+        <button class="btn btn-outline reset-filters-btn" id="resetFilters">Reset Filters</button>
+      </div>
+
+      <!-- Movie Grid -->
+      <div class="movies-grid-container">
+        <div class="movie-grid" id="moviesGrid" role="list"></div>
+        <div class="load-more-container">
+          <button class="btn btn-outline load-more-btn" id="loadMoreBtn">Load More</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── VIEW: SEARCH RESULTS ── -->
+    <div id="searchView" class="view">
+      <div class="view-header">
+        <h1 class="view-title">Search Results</h1>
+        <p class="view-subtitle" id="searchResultsSubtitle">Searching...</p>
+      </div>
+      <div class="movies-grid-container">
+        <div class="movie-grid" id="searchGrid" role="list"></div>
+      </div>
+    </div>
+
+    <!-- ── VIEW: WATCHLIST ── -->
+    <div id="watchlistView" class="view">
+      <div class="view-header">
+        <h1 class="view-title">My List</h1>
+        <p class="view-subtitle" id="watchlistSubtitle">No movies saved</p>
+      </div>
+
+      <div class="movies-grid-container">
+        <div class="movie-grid" id="watchlistGrid" role="list"></div>
+        
+        <!-- Empty Watchlist fallback -->
+        <div class="empty-state" id="watchlistEmpty" style="display: none;">
+          <div class="empty-icon">🍿</div>
+          <h3 class="empty-title">Your list is empty</h3>
+          <p class="empty-desc">Explore movies and add them to your list to watch later.</p>
+          <button class="btn btn-primary" id="browseMoviesBtn">Browse CineVerse</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ===== MOVIE DETAIL OVERLAY MODAL ===== -->
+  <div class="modal-overlay" id="movieModal" role="dialog" aria-modal="true" style="display: none;">
+    <div class="modal-container">
+      <button class="modal-close" id="modalClose" aria-label="Close details">✕</button>
+      <div class="modal-backdrop" id="modalBackdrop">
+        <div class="modal-backdrop-gradient"></div>
+      </div>
+      <div class="modal-body">
+        <div class="modal-poster-col">
+          <img class="modal-poster" id="modalPoster" src="" alt="Movie Poster" />
+        </div>
+        <div class="modal-info-col">
+          <div class="modal-genres" id="modalGenres"></div>
+          <h2 class="modal-title" id="modalTitle">Loading details...</h2>
+          <div class="modal-meta-row" id="modalMetaRow"></div>
+          <p class="modal-overview" id="modalOverview"></p>
+          <div class="modal-stats" id="modalStats"></div>
+          <div class="modal-actions">
+            <button class="btn btn-primary" id="modalTrailerBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,3 20,12 6,21"/></svg>
+              Watch Trailer
+            </button>
+            <button class="btn btn-secondary" id="modalWatchlistBtn">
+              + My List
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== VIDEO TRAILER OVERLAY MODAL ===== -->
+  <div class="modal-overlay trailer-modal-overlay" id="trailerModal" role="dialog" aria-modal="true" style="display: none;">
+    <div class="trailer-modal-container">
+      <button class="modal-close trailer-close" id="trailerClose" aria-label="Close trailer">✕</button>
+      
+      <!-- Video Player Wrapper -->
+      <div class="trailer-iframe-wrapper" id="trailerIframeWrapper">
+        <iframe
+          id="trailerIframe"
+          src=""
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          title="Movie Trailer"
+        ></iframe>
+      </div>
+
+      <!-- No trailer fallback -->
+      <div class="trailer-no-video" id="trailerNoVideo" style="display: none;">
+        <div class="empty-icon">🎞️</div>
+        <h3>No Trailer Available</h3>
+        <p>An official YouTube trailer could not be located for this movie.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TOAST NOTIFICATION CONTAINER ===== -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- ===== SCROLL TO TOP ===== -->
+  <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top" style="display: none;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18,15 12,9 6,15"/>
+    </svg>
+  </button>
+
+  <!-- Script Logic -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,612 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS — CineVerse
+   ============================================================ */
+:root {
+  /* ── Palette ──────────────────────────────── */
+  --bg-primary:    #141414; /* Netflix black */
+  --bg-secondary:  #181818;
+  --bg-card:       #181818;
+  --bg-card-hover: #2f2f2f;
+  --bg-overlay:    rgba(20, 20, 20, 0.95);
+
+  --border:        rgba(255, 255, 255, 0.08);
+  --border-hover:  rgba(255, 255, 255, 0.25);
+  --border-focus:  rgba(229, 9, 20, 0.6);
+
+  --text-primary:   #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-muted:     #808080;
+
+  /* ── Brand ────────────────────────────────── */
+  --accent:        #e50914;
+  --accent-hover:  #ff2030;
+  --accent-dim:    rgba(229, 9, 20, 0.12);
+  --accent-glow:   rgba(229, 9, 20, 0.25);
+
+  --gold:          #46d369; /* Netflix Match Green */
+  --gold-dim:      rgba(70, 211, 105, 0.15);
+
+  --green:  #46d369;
+  --yellow: #eab308;
+  --orange: #f97316;
+
+  /* ── Layout ───────────────────────────────── */
+  --navbar-h: 4.25rem;
+
+  /* ── Radius (Netflix is sharp-cornered) ───── */
+  --r-sm:  4px;
+  --r-md:  4px;
+  --r-lg:  6px;
+  --r-xl:  8px;
+  --r-2xl: 8px;
+
+  /* ── Shadows ──────────────────────────────── */
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.45);
+  --shadow-modal: 0 24px 80px rgba(0,0,0,0.8);
+  --shadow-accent: 0 4px 24px rgba(229,9,20,0.35);
+
+  /* ── Glass ────────────────────────────────── */
+  --glass:        rgba(255,255,255,0.035);
+  --glass-border: rgba(255,255,255,0.08);
+
+  /* ── Transitions ──────────────────────────── */
+  --t-fast:   120ms ease;
+  --t-normal: 220ms ease;
+  --t-slow:   380ms ease;
+}
+
+/* ── Light theme overrides ───────────────────── */
+[data-theme="light"] {
+  --bg-primary:    #f2f2f8;
+  --bg-secondary:  #ffffff;
+  --bg-card:       #ffffff;
+  --bg-card-hover: #ebebf5;
+  --bg-overlay:    rgba(242,242,248,0.92);
+  --border:        rgba(0,0,0,0.07);
+  --border-hover:  rgba(0,0,0,0.15);
+  --border-focus:  rgba(229,9,20,0.5);
+  --text-primary:  #111120;
+  --text-secondary:#44445e;
+  --text-muted:    #888899;
+  --glass:         rgba(0,0,0,0.025);
+  --glass-border:  rgba(0,0,0,0.07);
+  --accent-dim:    rgba(229,9,20,0.08);
+  --shadow-card:   0 2px 12px rgba(0,0,0,0.1);
+}
+
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-inter, "Inter", system-ui, sans-serif);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* ── Scrollbar ─────────────────────────────────── */
+::-webkit-scrollbar          { width: 5px; height: 5px; }
+::-webkit-scrollbar-track    { background: transparent; }
+::-webkit-scrollbar-thumb    { background: var(--text-muted); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+/* ── Selection ─────────────────────────────────── */
+::selection { background: var(--accent); color: #fff; }
+
+/* ── Focus ring ────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--r-sm);
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
+.navbar {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 100;
+  height: var(--navbar-h);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  /* always slightly visible for good UX */
+  background: linear-gradient(to bottom, rgba(8,8,16,0.6) 0%, transparent 100%);
+}
+.navbar.scrolled {
+  background: var(--bg-overlay);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 32px rgba(0,0,0,0.4);
+}
+
+/* ── Nav link underline animation ──────────────── */
+.nav-link-item {
+  position: relative;
+}
+.nav-link-item::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  right: 50%;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+  transition: left 0.22s ease, right 0.22s ease;
+}
+.nav-link-item.active::after,
+.nav-link-item:hover::after {
+  left: 0;
+  right: 0;
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero-backdrop-gradient {
+  background:
+    /* left: strong fade for text readability */
+    linear-gradient(100deg, var(--bg-primary) 0%, rgba(8,8,16,0.82) 35%, rgba(8,8,16,0.3) 60%, transparent 80%),
+    /* bottom: always visible fade into content */
+    linear-gradient(to top, var(--bg-primary) 0%, rgba(8,8,16,0.65) 30%, transparent 60%),
+    /* vignette top */
+    linear-gradient(to bottom, rgba(8,8,16,0.5) 0%, transparent 25%);
+}
+
+/* ── Hero progress bar ─────────────────────────── */
+@keyframes hero-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.hero-progress {
+  transform-origin: left center;
+  animation: hero-progress 8s linear forwards;
+}
+
+/* ── Hero shimmer ──────────────────────────────── */
+@keyframes hero-shimmer {
+  0%   { opacity: 0.5; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+/* ============================================================
+   SKELETON
+   ============================================================ */
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-card)       0%,
+    var(--bg-card-hover) 40%,
+    var(--bg-card)       80%
+  );
+  background-size: 800px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: var(--r-sm);
+}
+
+/* ============================================================
+   MOVIE CARDS
+   ============================================================ */
+
+/* ── Poster image hover zoom ───────────────────── */
+.poster-img {
+  transition: transform 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+.card-root:hover .poster-img { transform: scale(1.07); }
+
+/* ── Card overlay that slides up on hover ────────*/
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.28s ease;
+}
+.card-root:hover .card-overlay { opacity: 1; }
+
+/* ── Card actions that slide up ───────────────── */
+.card-actions {
+  position: absolute;
+  bottom: 0;
+  left: 0; right: 0;
+  padding: 12px;
+  transform: translateY(8px);
+  opacity: 0;
+  transition: transform 0.28s ease, opacity 0.28s ease;
+}
+.card-root:hover .card-actions {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* ── Card info bottom ─────────────────────────── */
+.card-info {
+  padding: 10px 12px 12px;
+  background: var(--bg-card);
+}
+
+/* ── Rating pill ──────────────────────────────── */
+.rating-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px 2px 5px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.12);
+  line-height: 1;
+}
+
+/* ── Genre chip ───────────────────────────────── */
+.genre-chip {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 99px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  line-height: 1.6;
+}
+
+/* ── Watchlist button that's always visible on card ─ */
+.wl-btn-always {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 20;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.wl-btn-always:hover { transform: scale(1.12); }
+
+/* ============================================================
+   HORIZONTAL SCROLL ROW
+   ============================================================ */
+.h-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;           /* Firefox */
+  -ms-overflow-style: none;        /* IE 11 */
+  padding-bottom: 8px;
+}
+.h-scroll::-webkit-scrollbar { display: none; }
+
+/* ── Fade-edge effect on scroll rows ─────────────── */
+.h-scroll-container {
+  position: relative;
+}
+.h-scroll-container::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 8px;
+  width: 80px;
+  background: linear-gradient(to right, transparent, var(--bg-primary));
+  pointer-events: none;
+  z-index: 2;
+}
+[data-theme="light"] .h-scroll-container::after {
+  background: linear-gradient(to right, transparent, var(--bg-primary));
+}
+
+/* ── Section accent bar ───────────────────────── */
+.section-bar {
+  display: inline-block;
+  width: 3px;
+  height: 20px;
+  border-radius: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent-glow);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: var(--r-lg);
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.15s ease;
+  box-shadow: var(--shadow-accent);
+  white-space: nowrap;
+}
+.btn-primary:hover  { background: var(--accent-hover); box-shadow: 0 6px 32px rgba(229,9,20,0.45); }
+.btn-primary:active { transform: scale(0.97); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--r-lg);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+.btn-ghost:hover  { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); }
+.btn-ghost:active { transform: scale(0.97); }
+
+.btn-ghost-filled {
+  background: rgba(255,255,255,0.95);
+  color: #111120;
+  border-color: transparent;
+}
+.btn-ghost-filled:hover { background: #fff; }
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border-hover);
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 13px;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+  white-space: nowrap;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+/* ============================================================
+   FILTER / SELECT CONTROLS
+   ============================================================ */
+.ctrl-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  color: var(--text-primary);
+  border-radius: var(--r-md);
+  padding: 7px 30px 7px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.18s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%238888a0' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+.ctrl-select:focus { border-color: var(--accent); }
+.ctrl-select option { background: var(--bg-secondary); color: var(--text-primary); }
+
+/* ─── Filter pill tabs (category tabs) ─────────── */
+.filter-tab {
+  padding: 5px 16px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--border-hover);
+  color: var(--text-secondary);
+  background: transparent;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.filter-tab:hover  { color: var(--text-primary); border-color: var(--border-hover); background: var(--glass); }
+.filter-tab.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: var(--shadow-accent); }
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modal-panel {
+  position: relative;
+  width: 100%;
+  max-width: 780px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: var(--r-2xl);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-hover);
+  box-shadow: var(--shadow-modal);
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+.modal-panel::-webkit-scrollbar { display: none; }
+
+/* ── Modal close button ────────────────────────── */
+.modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 40;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  transition: background 0.18s ease;
+}
+.modal-close-btn:hover { background: var(--accent); }
+
+/* ── Stat card ─────────────────────────────────── */
+.stat-card {
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  padding: 10px 14px;
+  min-width: 90px;
+}
+
+/* ============================================================
+   BACKDROP / HERO IMAGE ZOOM ANIMATION
+   ============================================================ */
+@keyframes slow-zoom {
+  from { transform: scale(1) translate(0,0); }
+  to   { transform: scale(1.06) translate(-1%, -0.5%); }
+}
+.bg-slow-zoom { animation: slow-zoom 22s ease-in-out infinite alternate; }
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 16px;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+@media (min-width: 640px) { .toast-container { right: 24px; } }
+
+/* ============================================================
+   SCROLL-TO-TOP
+   ============================================================ */
+.scroll-top {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 50;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-accent);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  cursor: pointer;
+}
+.scroll-top:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 36px rgba(229,9,20,0.45);
+}
+@media (max-width: 640px) {
+  .scroll-top { bottom: 16px; right: 16px; width: 36px; height: 36px; }
+}
+
+/* ============================================================
+   SEARCH BAR
+   ============================================================ */
+.search-input-field {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-hover);
+  color: var(--text-primary);
+  border-radius: var(--r-lg);
+  padding: 8px 40px 8px 14px;
+  font-size: 13.5px;
+  outline: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.search-input-field::placeholder { color: var(--text-muted); }
+.search-input-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* ============================================================
+   WATCHLIST / EMPTY STATES
+   ============================================================ */
+.empty-icon-ring {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer-tmdb-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 12px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+.footer-tmdb-logo:hover { color: var(--accent-hover); }
+
+/* ============================================================
+   MOBILE-SPECIFIC
+   ============================================================ */
+@media (max-width: 390px) {
+  .hero-title-text { font-size: 1.9rem !important; }
+}
+
+/* ============================================================
+   TEXT UTILS
+   ============================================================ */
+.line-clamp-1 { display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden; }
+.line-clamp-2 { display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.line-clamp-3 { display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.line-clamp-4 { display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
