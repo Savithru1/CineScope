@@ -1,26 +1,11 @@
-# Dependencies
-node_modules/
-cineverse/node_modules/
+# Exclude the Next.js subdirectory entirely
+cineverse/
 
-# Next.js build outputs
-.next/
-cineverse/.next/
-out/
-cineverse/out/
+# Temporary wrangler folder
+.wrangler/
 
-# Environment variables
-.env*.local
-cineverse/.env*.local
-
-# Editor directories and files
-.idea/
-.vscode/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# OS files
+# OS and Editor files
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/

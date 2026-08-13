@@ -1,65 +1,31 @@
-# 🎬 CineVerse — Premium Movie Discovery
+# 🎬 CineVerse – Netflix Aesthetic Movie Discovery
 
-CineVerse is a polished, production-quality movie discovery website built with a premium cinematic design.
+A zero-build, ultra-fast, premium movie discovery platform designed with a Netflix cinematic aesthetic.
 
-You have two build and deployment options included in this workspace:
-1. **🚀 Zero-Build Static Version (Root Directory)** — Pure HTML, CSS, and Vanilla JS. It requires no backend, installation, or build process. You can open `index.html` directly in the browser or deploy it to Vercel/GitHub Pages instantly.
-2. **⚛️ Next.js 14 Web Application (`/cineverse` sub-directory)** — Built using Next.js 14, React, Tailwind CSS, Framer Motion, and Zustand for state management.
-
----
-
-## ⚡ Option 1: Zero-Build Static Version (Root)
-
-Ideal for instant deployment without any npm installation or build configurations.
-
-### Features:
-- **Cinematic Rotating Hero** with backdrop zoom transition, meta rows, and quick actions.
-- **Dynamic Content Rows** (Trending, Popular, Top Rated, Upcoming).
-- **Search & Filters** (Genre dropdowns, rating thresholds, and sorting parameters).
-- **Local Watchlist & Dark/Light Mode** fully persisted using `localStorage`.
-- **Responsive Modals** for details and official YouTube trailers.
-- **API Fallbacks** — Automatic graceful client-side demo dataset loaded if the API key is missing.
-
-### Local Setup:
-1. Open `script.js` and set your key at the top of the file:
-   ```javascript
-   const TMDB_API_KEY = "YOUR_API_KEY";
-   ```
-2. Double-click `index.html` to run the site locally!
+## ✨ Core Features Included
+1. **Responsive movie interface** (✅ Verified): Smooth navigation and layout sizing validated across desktop, tablet, and mobile screens.
+2. **Featured Hero Section** (✅ Verified): Giant rotating billboard with custom backdrop-zoom transitions, dynamic metadata, genres, overview text, play trailer CTAs, and watchlist actions.
+3. **Netflix 16:9 Landscape Movie Cards** (✅ Verified): Displaying public TMDB movie backdrops, ratings, primary genres, and release years inside horizontally sliding sections.
+4. **Interactive Modal Details** (✅ Verified): Clean popups showing full synopsis, runtime, stats, and a trailer play button.
+5. **Embedded Video Player** (✅ Verified): Direct integration of YouTube trailer clips in a custom overlay player.
+6. **Filters & Category Controls** (✅ Verified): Browse grid with search capabilities, genre filters, minimum ratings, and multiple sorting methods (Popularity, Rating, Release Date).
+7. **Personalized Watchlist** (✅ Verified): Complete addition/removal of titles with dynamic badge counters and full persistent `localStorage` synchronization.
+8. **Dark/Light Theme** (✅ Verified): One-click theme toggle that persists selections across sessions.
+9. **Zero Dependencies** (✅ Verified): Utilizes a local mock dataset of real hit movies—requiring **no API key setup, no backend installation, and zero build configurations**.
 
 ---
 
-## ⚛️ Option 2: Next.js 14 Web Application (`/cineverse`)
-
-Ideal for advanced development, utilizing React hooks, Framer Motion animations, and Zustand store management.
-
-### Local Setup:
-1. Navigate into the Next.js directory:
-   ```bash
-   cd cineverse
-   ```
-2. Install the node packages:
-   ```bash
-   npm install
-   ```
-3. Set your TMDB key in `.env.local`:
-   ```env
-   NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_key_here
-   ```
-4. Run the development server:
-   ```bash
-   npm run dev
-   ```
+## 🚀 Running the App
+- Simply double-click **`index.html`** to open the site directly in any web browser!
 
 ---
 
-## 🔑 Getting a TMDB API Key
-1. Sign up for a free account at [themoviedb.org](https://www.themoviedb.org).
-2. Navigate to **Settings** → **API** from your profile.
-3. Generate a Developer API Key and copy the key (v3 auth).
+## 🌐 Deploying to GitHub Pages
+1. Go to your repository settings page: **[Savithru1/CineScope Settings](https://github.com/Savithru1/CineScope/settings/pages)**.
+2. Under **Build and deployment**:
+   - **Source**: Select `Deploy from a branch`.
+   - **Branch**: Set it to **`main`** (or `gh-pages`) and select `/ (root)` folder.
+3. Click **Save**.
 
----
-
-## 🌐 Deploying to Vercel
-- **For Vanilla HTML/CSS/JS (Root)**: Deploy the root folder directory directly. Vercel will auto-detect it as a static project and deploy it instantly.
-- **For Next.js App (`/cineverse`)**: Deploy the subfolder. Vercel will automatically configure the Next.js builder, compile typescript, and serve the application.
+The site will go live at:
+👉 **[https://Savithru1.github.io/CineScope/](https://Savithru1.github.io/CineScope/)**
