@@ -105,6 +105,9 @@
             <div class="skeleton skeleton-btn"></div>
           </div>
         </div>
+        <!-- Prev / Next arrow buttons -->
+        <button class="carousel-arrow carousel-arrow-prev" id="carouselPrev" aria-label="Previous slide">&#8249;</button>
+        <button class="carousel-arrow carousel-arrow-next" id="carouselNext" aria-label="Next slide">&#8250;</button>
         <!-- Slide indicators/dots -->
         <div class="carousel-indicators" id="carouselIndicators"></div>
       </div>
@@ -203,6 +206,9 @@
 
         <button class="btn btn-outline" id="clearFiltersBtn">Reset Filters</button>
       </div>
+
+      <!-- Active Filter Chips -->
+      <div class="active-filter-chips" id="activeFilterChips"></div>
 
       <!-- Browse Movie Grid -->
       <div class="grid-wrapper">
@@ -476,6 +482,21 @@
   <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top" style="display: none;">
     ▲
   </button>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">CineScope</div>
+      <p class="footer-tagline">Premium film discovery. Zero setup required.</p>
+      <div class="footer-links">
+        <span class="footer-link" id="footerHome">Home</span>
+        <span class="footer-link" id="footerBrowse">Browse</span>
+        <span class="footer-link" id="footerWatchlist">My List</span>
+        <span class="footer-link" id="footerSettings">Settings</span>
+      </div>
+      <p class="footer-tagline">Built with ❤️ using HTML5, CSS3 &amp; Vanilla JS · TMDB API integration available</p>
+    </div>
+  </footer>
 
   <!-- Javascript Logic -->
   <script src="script.js"></script>
